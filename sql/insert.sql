@@ -1,56 +1,82 @@
-USE MovieRentalDB;
+-- ==========================================
+-- TEST DATA INITIALIZATION SCRIPT
+-- Clears and repopulates the database
+-- ==========================================
+
+-- Delete existing records (in dependency order to avoid FK issues)
+DELETE FROM RentalHistory;
+DELETE FROM MovieQueue;
+DELETE FROM RentalOrder;
+DELETE FROM PhoneNumber;
+DELETE FROM MovieActor;
+DELETE FROM Employee;
+DELETE FROM Customer;
+DELETE FROM Actor;
+DELETE FROM Movie;
 GO
 
--- ============================================
--- 1. MOVIES
--- ============================================
-INSERT INTO Movies (MovieName, MovieType, DistributionFee, NumCopies, Rating)
-VALUES
-('The Office: The Movie', 'Comedy', 10.00, 5, 4),
-('Edge of Tomorrow', 'Action', 12.50, 3, 5),
-('Parasite', 'Foreign', 8.00, 4, 3),
-('The Shawshank Redemption', 'Drama', 11.00, 2, 5);
+-- ==========================================
+-- Insert base entities
+-- ==========================================
 
--- ============================================
--- 2. ACTORS
--- ============================================
-INSERT INTO Actors (ActorName, Gender, Age, Rating)
+INSERT INTO Movie (id, title, genre, distribution_fee, copies_available, rating)
 VALUES
-('Tom Cruise', 'Male', 62, 5),
-('Emma Stone', 'Female', 36, 4),
-('Steve Carell', 'Male', 61, 5),
-('Song Kang-ho', 'Male', 58, 4);
+(1, 'Movie A', 'Drama', 5.00, 10, 5),
+(2, 'Movie B', 'Comedy', 7.50, 5, 6),
+(3, 'Movie C', 'Action', 3.00, 8, 4);
+GO
 
--- ============================================
--- 3. MOVIE–ACTOR LINKS
--- ============================================
-INSERT INTO MovieActors (MovieID, ActorID) VALUES
-(1, 3), -- The Office: The Movie -> Steve Carell
-(2, 1), -- Edge of Tomorrow -> Tom Cruise
-(3, 4), -- Parasite -> Song Kang-ho
-(4, 1); -- Shawshank Redemption -> (pretend cameo)
-
--- ============================================
--- 4. CUSTOMERS
--- ============================================
-INSERT INTO Customers (LastName, FirstName, Address, City, State, ZipCode, Telephone, Email, AccountNumber, CreditCardNumber)
+INSERT INTO Actor (id, full_name, gender, birth_date, rating)
 VALUES
-('Smith', 'John', '123 Maple St', 'Edmonton', 'AB', 'T5J0Y7', '780-555-1234', 'john.smith@email.com', 'ACC1001', '1111222233334444'),
-('Doe', 'Jane', '456 Oak St', 'Calgary', 'AB', 'T2N1N4', '403-555-5678', 'jane.doe@email.com', 'ACC1002', '5555666677778888');
+(1, 'John Actor', 'M', '1964-09-02', 5),
+(2, 'Jane Actor', 'F', '1961-07-30', 6),
+(3, 'Jim Actor', 'M', '1924-04-03', 4),
+(4, 'Jill Actor', 'F', '1940-04-25', 5),
+(5, 'Joe Actor', 'M', '1958-01-26', 3);
+GO
 
--- ============================================
--- 5. EMPLOYEES
--- ============================================
-INSERT INTO Employees (SSN, LastName, FirstName, Address, City, State, ZipCode, Telephone)
+INSERT INTO MovieActor (movie_id, actor_id, role_name)
 VALUES
-('111-22-3333', 'Johnson', 'Emily', '99 Broadway Ave', 'Edmonton', 'AB', 'T5K2G8', '780-555-9090'),
-('222-33-4444', 'Wong', 'David', '77 Jasper Rd', 'Calgary', 'AB', 'T2P3H5', '403-555-1010');
+(1, 1, 'Role 1'),
+(1, 2, 'Role 2'),
+(2, 3, 'Role 3'),
+(2, 4, 'Role 4'),
+(3, 5, 'Role 5');
+GO
 
--- ============================================
--- 6. ORDERS
--- ============================================
-INSERT INTO Orders (MovieID, CustomerID, EmployeeID, CheckoutDate, ReturnDate)
+INSERT INTO Customer (id, last_name, first_name, address, city, state, zip_code, email, account_number, account_created, birth_date, credit_card_token, rating)
 VALUES
-(1, 1, 1, GETDATE(), NULL),     -- John Smith rented "The Office"
-(2, 2, 2, GETDATE(), NULL);     -- Jane Doe rented "Edge of Tomorrow"
+(1, 'Smith', 'John', '123 Elm St', 'New York', 'NY', '10001', 'john.smith@example.com', 1001, '2020-01-15', '1990-05-12', '1234567890123456', 5),
+(2, 'Doe', 'Jane', '456 Oak St', 'Chicago', 'IL', '60601', 'jane.doe@example.com', 1002, '2021-03-10', '1988-11-02', '6543210987654321', 6);
+GO
+
+INSERT INTO Employee (id, ssn, last_name, first_name, address, city, state, zip_code, hire_date, birth_date)
+VALUES
+(1, '123-45-6789', 'Johnson', 'Mary', '789 Pine St', 'Boston', 'MA', '02108', '2015-06-01', '1985-09-14'),
+(2, '987-65-4321', 'Brown', 'Robert', '321 Cedar St', 'Seattle', 'WA', '98101', '2018-02-12', '1992-01-25');
+GO
+
+INSERT INTO PhoneNumber (id, phone, type, customer_id, employee_id, note)
+VALUES
+(1, '555-111-2222', 'Mobile', 1, NULL, 'Primary contact for John Smith'),
+(2, '555-333-4444', 'Home', 2, NULL, 'Jane prefers evenings'),
+(3, '555-555-6666', 'Work', NULL, 1, 'Mary Johnson office line');
+GO
+
+INSERT INTO RentalOrder (id, movie_id, customer_id, employee_id, checkout_at, returned_at, note)
+VALUES
+(1, 1, 1, 1, '2024-10-01 14:00:00', '2024-10-05 16:00:00', 'Returned in good condition'),
+(2, 2, 2, 2, '2024-10-03 09:30:00', NULL, 'Still rented');
+GO
+
+INSERT INTO MovieQueue (id, customer_id, movie_id, queue_position, added_at)
+VALUES
+(1, 1, 3, 1, '2024-10-10 10:00:00'),
+(2, 2, 1, 1, '2024-10-12 11:30:00');
+GO
+
+INSERT INTO RentalHistory (id, customer_id, movie_id, employee_id, rented_at, returned_at, customer_rating)
+VALUES
+(1, 1, 1, 1, '2024-09-01 12:00:00', '2024-09-04 15:00:00', 5),
+(2, 2, 2, 2, '2024-09-10 13:00:00', '2024-09-15 09:00:00', 6);
 GO
