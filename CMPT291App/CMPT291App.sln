@@ -1,0 +1,30 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# SQL Server Management Studio Version 21
+VisualStudioVersion = 17.14.36623.8
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CMPT291App", "CMPT291App\CMPT291App.csproj", "{802995A9-162B-469A-83F0-BDDF1C002057}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Default|Any CPU = Default|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{802995A9-162B-469A-83F0-BDDF1C002057}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{802995A9-162B-469A-83F0-BDDF1C002057}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{802995A9-162B-469A-83F0-BDDF1C002057}.Default|Any CPU.ActiveCfg = Release|Any CPU
+		{802995A9-162B-469A-83F0-BDDF1C002057}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{802995A9-162B-469A-83F0-BDDF1C002057}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3D62C45E-4556-4978-8704-873A54955602}.Debug|Any CPU.ActiveCfg = Default
+		{3D62C45E-4556-4978-8704-873A54955602}.Default|Any CPU.ActiveCfg = Default
+		{3D62C45E-4556-4978-8704-873A54955602}.Release|Any CPU.ActiveCfg = Default
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {36ECF9B6-A8B2-4863-B0C5-363484856AB4}
+	EndGlobalSection
+EndGlobal
