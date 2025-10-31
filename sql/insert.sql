@@ -1,9 +1,3 @@
--- ==========================================
--- TEST DATA INITIALIZATION SCRIPT
--- Clears and repopulates the database
--- ==========================================
-
--- Delete existing records (in dependency order to avoid FK issues)
 DELETE FROM RentalHistory;
 DELETE FROM MovieQueue;
 DELETE FROM RentalOrder;
@@ -14,10 +8,6 @@ DELETE FROM Customer;
 DELETE FROM Actor;
 DELETE FROM Movie;
 GO
-
--- ==========================================
--- Insert base entities
--- ==========================================
 
 INSERT INTO Movie (id, title, genre, distribution_fee, copies_available, rating)
 VALUES
