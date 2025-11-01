@@ -125,4 +125,9 @@ ALTER TABLE MovieQueue ADD CONSTRAINT FK_MovieQueue_Movie FOREIGN KEY (movie_id)
 ALTER TABLE RentalHistory ADD CONSTRAINT FK_RentalHistory_Customer FOREIGN KEY (customer_id) REFERENCES Customer(id);
 ALTER TABLE RentalHistory ADD CONSTRAINT FK_RentalHistory_Movie FOREIGN KEY (movie_id) REFERENCES Movie(id);
 ALTER TABLE RentalHistory ADD CONSTRAINT FK_RentalHistory_Employee FOREIGN KEY (employee_id) REFERENCES Employee(id);
+
+ALTER TABLE Movie ADD CONSTRAINT CHK_Movie_Rating CHECK (rating BETWEEN 1 AND 5);
+ALTER TABLE Actor ADD CONSTRAINT CHK_Actor_Rating CHECK (rating BETWEEN 1 AND 5);
+ALTER TABLE Customer ADD CONSTRAINT CHK_Customer_Rating CHECK (rating BETWEEN 1 AND 5);
+ALTER TABLE RentalHistory ADD CONSTRAINT CHK_CustomerMovie_Rating CHECK (customer_rating BETWEEN 1 AND 5);
 GO
