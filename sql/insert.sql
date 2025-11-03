@@ -1,3 +1,8 @@
+ALTER TABLE dbo.Movie         NOCHECK CONSTRAINT CHK_Movie_Rating;
+ALTER TABLE dbo.Actor         NOCHECK CONSTRAINT CHK_Actor_Rating;
+ALTER TABLE dbo.Customer      NOCHECK CONSTRAINT CHK_Customer_Rating;
+ALTER TABLE dbo.RentalHistory NOCHECK CONSTRAINT CHK_CustomerMovie_Rating;
+GO
 DELETE FROM RentalHistory;
 DELETE FROM MovieQueue;
 DELETE FROM RentalOrder;
@@ -69,4 +74,16 @@ INSERT INTO RentalHistory (id, customer_id, movie_id, employee_id, rented_at, re
 VALUES
 (1, 1, 1, 1, '2024-09-01 12:00:00', '2024-09-04 15:00:00', 5),
 (2, 2, 2, 2, '2024-09-10 13:00:00', '2024-09-15 09:00:00', 6);
+GO
+
+
+UPDATE dbo.Movie         SET rating = 5 WHERE rating > 5;
+UPDATE dbo.Actor         SET rating = 5 WHERE rating > 5;
+UPDATE dbo.Customer      SET rating = 5 WHERE rating > 5;
+UPDATE dbo.RentalHistory SET customer_rating = 5 WHERE customer_rating > 5;
+
+ALTER TABLE dbo.Movie         WITH CHECK CHECK CONSTRAINT CHK_Movie_Rating;
+ALTER TABLE dbo.Actor         WITH CHECK CHECK CONSTRAINT CHK_Actor_Rating;
+ALTER TABLE dbo.Customer      WITH CHECK CHECK CONSTRAINT CHK_Customer_Rating;
+ALTER TABLE dbo.RentalHistory WITH CHECK CHECK CONSTRAINT CHK_CustomerMovie_Rating;
 GO

@@ -131,3 +131,39 @@ ALTER TABLE Actor ADD CONSTRAINT CHK_Actor_Rating CHECK (rating IS NULL OR (rati
 ALTER TABLE Customer ADD CONSTRAINT CHK_Customer_Rating CHECK (rating IS NULL OR (rating BETWEEN 1 AND 5));
 ALTER TABLE RentalHistory ADD CONSTRAINT CHK_CustomerMovie_Rating CHECK (customer_rating IS NULL OR (customer_rating BETWEEN 1 AND 5));
 GO
+
+-- Ensure one owner per phone number (customer XOR employee)
+ALTER TABLE dbo.PhoneNumber
+ADD CONSTRAINT CHK_Phone_Owner
+CHECK (
+  (CASE WHEN customer_id IS NULL THEN 0 ELSE 1 END) +
+  (CASE WHEN employee_id IS NULL THEN 0 ELSE 1 END) = 1
+);
+
+-- Returned date cant preceed checkout
+ALTER TABLE dbo.RentalOrder
+ADD CONSTRAINT CHK_RentalOrder_Dates
+CHECK (returned_at IS NULL OR returned_at >= checkout_at);
+
+-- A customer cant queue the same movie twice
+CREATE UNIQUE INDEX UX_MovieQueue_UniqueMoviePerCustomer
+  ON dbo.MovieQueue(customer_id, movie_id);
+
+-- Queue positions are unique within a customer
+CREATE UNIQUE INDEX UX_MovieQueue_PositionPerCustomer
+  ON dbo.MovieQueue(customer_id, queue_position);
+
+-- Prevent negative fee/inventory
+ALTER TABLE dbo.Movie
+ADD CONSTRAINT CHK_Movie_PositiveValues
+CHECK (distribution_fee >= 0 AND copies_available >= 0);
+
+-- Prevent future hire dates
+ALTER TABLE dbo.Employee
+ADD CONSTRAINT CHK_Employee_HireDate
+CHECK (hire_date <= GETDATE());
+
+-- Small, helpful indexes (no behavior change)
+CREATE INDEX IX_Movie_Title    ON dbo.Movie(title);
+CREATE INDEX IX_Order_Customer ON dbo.RentalOrder(customer_id);
+GO
